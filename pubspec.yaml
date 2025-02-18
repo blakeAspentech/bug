@@ -8,9 +8,11 @@ environment:
   flutter: 3.27.1
 
 dependencies:
+  equatable: ^2.0.7
   flutter:
     sdk: flutter
   flutter_bloc: 8.1.4
+  path_provider: 2.1.5
 
 
 dev_dependencies:
@@ -20,3 +22,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/bee_movie_script.txt
+    - assets/
