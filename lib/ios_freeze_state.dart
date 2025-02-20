@@ -1,4 +1,3 @@
-import 'dart:isolate';
 
 import 'package:bug/isolate_handler.dart';
 import 'package:equatable/equatable.dart';

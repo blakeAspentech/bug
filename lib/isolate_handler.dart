@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, unused_field
+
 import "dart:async";
 import "dart:isolate";
 

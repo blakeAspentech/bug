@@ -1,4 +1,3 @@
-import 'dart:isolate';
 
 import 'package:bug/ios_freeze_event.dart';
 import 'package:bug/ios_freeze_state.dart';
