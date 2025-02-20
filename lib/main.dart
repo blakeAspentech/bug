@@ -41,7 +41,7 @@ class Lag extends StatelessWidget {
     return BlocBuilder<LagBloc, LagState>(
         builder: (final context, final state) {
       return Scaffold(
-          appBar: AppBar(title: const Text('iOS Freeze 18.3.1')),
+          appBar: AppBar(title: const Text('Flutter Freeze')),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +66,7 @@ class Lag extends StatelessWidget {
                     NewIsolateInfo info = NewIsolateInfo(
                       "isolate${state.isolateHandlers.length + i}",
                       ServicesBinding.rootIsolateToken!);
-                      //await Future.delayed(Duration(seconds: 1)); // offset the isolates
+                      await Future.delayed(Duration(milliseconds: 10)); // offset the isolates
                       print("Isolate dispatch $i");
                        newIsolates.add(IsolateHandler(info));
                   

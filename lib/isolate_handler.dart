@@ -11,7 +11,8 @@ class NewIsolateInfo {
   NewIsolateInfo(this.name, this.token);
 }
 
-Duration syncInterval = Duration(seconds: 7);
+Duration syncInterval = Duration(seconds: 5);
+Duration busyInterval = Duration(milliseconds: 4950);
 
 class IsolateHandler {
 
@@ -54,7 +55,7 @@ class IsolateHandler {
 
     Stopwatch timer = Stopwatch()..start();
     // loop for a bit
-    while(timer.elapsed < Duration(seconds: 5)) {
+    while(timer.elapsed < busyInterval) {
       var math = 8^7; // makes your device a heater
       }
     timer.stop();
