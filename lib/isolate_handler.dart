@@ -16,7 +16,7 @@ Duration busyInterval = Duration(milliseconds: 4950);
 
 class IsolateHandler {
 
-  late Isolate isolate;
+  //late Isolate isolate;
   late Timer? _timer;
   String name = "";
 
@@ -31,27 +31,28 @@ class IsolateHandler {
   void initIsolate(final NewIsolateInfo info)
   {
     BackgroundIsolateBinaryMessenger.ensureInitialized(info.token);
-    _timer = makePeriodicTimer(syncInterval, busyBee, fireNow: true);
+    makePeriodicTimer(syncInterval, busyBee, fireNow: true);
   }
 
-  void createIsolate(NewIsolateInfo info) async {
-    isolate = await Isolate.spawn(initIsolate, info,
-                      debugName: "isolate${info.name}");
+  void createIsolate(NewIsolateInfo info) {
+    unawaited(Isolate.spawn(initIsolate, info,
+                      debugName: "isolate${info.name}"));
     
   }
 
-  Timer? makePeriodicTimer(final Duration duration, final Function(Timer) callBack, {final bool fireNow = false}){
-    return runZonedGuarded(() {
+
+  void makePeriodicTimer(final Duration duration, final Function(Timer) callBack, {final bool fireNow = false}) {
+    unawaited(runZonedGuarded(() {
       Timer timer = Timer.periodic(syncInterval, callBack);
       if(fireNow){
         print("$name firing");
-        callBack(timer);
+        unawaited(callBack(timer));
       }
-      return timer;
-    }, (final e, final st) => print("Uncaught error in ${isolate.debugName}, $e : $st"));
+      return Future(() => null);
+    }, (final e, final st) => print("Uncaught error in $name, $e : $st")));
   }
 
-  void busyBee(final Timer timer) async {
+  void busyBee(final Timer timer) {
 
     Stopwatch timer = Stopwatch()..start();
     // loop for a bit
