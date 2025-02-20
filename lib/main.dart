@@ -1,7 +1,7 @@
 
-import 'package:bug/ios_freeze_bloc.dart';
-import 'package:bug/ios_freeze_event.dart';
-import 'package:bug/ios_freeze_state.dart';
+import 'package:bug/lag_bloc.dart';
+import 'package:bug/lag_event.dart';
+import 'package:bug/lag_state.dart';
 import 'package:bug/isolate_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,11 +19,11 @@ class MyApp extends StatelessWidget {
   Widget build(final BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<IOSFreezeBloc>(
-          create: (final context) => IOSFreezeBloc(),
+        BlocProvider<LagBloc>(
+          create: (final context) => LagBloc(),
         )
       ],
-      child: MaterialApp(home: IOSFreeze(key: key)),
+      child: MaterialApp(home: Lag(key: key)),
     );
   }
 }
@@ -31,12 +31,14 @@ class MyApp extends StatelessWidget {
 
 
 
-class IOSFreeze extends StatelessWidget {
-  const IOSFreeze({super.key});
+class Lag extends StatelessWidget {
+
+  final int isolatesPerClick = 8;
+  const Lag({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<IOSFreezeBloc, IOSFreezeState>(
+    return BlocBuilder<LagBloc, LagState>(
         builder: (final context, final state) {
       return Scaffold(
           appBar: AppBar(title: const Text('iOS Freeze 18.3.1')),
@@ -58,21 +60,20 @@ class IOSFreeze extends StatelessWidget {
               FloatingActionButton.extended(
                 onPressed: () async {
                   WidgetsFlutterBinding.ensureInitialized();
-                  String path = await rootBundle
-                      .loadString("assets/bee_movie_script.txt");
                   List<IsolateHandler> newIsolates = [];
-                  for (int i in Iterable.generate(8))
+                  for (int i in Iterable.generate(isolatesPerClick))
                   {
                     NewIsolateInfo info = NewIsolateInfo(
                       "isolate${state.isolateHandlers.length + i}",
-                      path,
                       ServicesBinding.rootIsolateToken!);
+                      //await Future.delayed(Duration(seconds: 1)); // offset the isolates
+                      print("Isolate dispatch $i");
                        newIsolates.add(IsolateHandler(info));
                   
                   }
                   if (context.mounted) {
-                    BlocProvider.of<IOSFreezeBloc>(context)
-                        .add(IOSFreezeEvent(isolates: newIsolates));
+                    BlocProvider.of<LagBloc>(context)
+                        .add(LagEvent(isolates: newIsolates));
                   } else {
                     print(
                         "Context not mounted while creating isolates");
@@ -80,7 +81,7 @@ class IOSFreeze extends StatelessWidget {
                   
                 },
                 icon: const Icon(Icons.add),
-                label: const Text('Add Isolate'),
+                label: const Text('Lag Button'),
               ),
               Expanded(
                   child: ListView.builder(
@@ -90,7 +91,7 @@ class IOSFreeze extends StatelessWidget {
                   print("building list item $index");
                   return ListTile(
                       title: Text(
-                          "${handler.name} "));
+                          handler.name));
                 },
               )),
             ],

@@ -7,9 +7,8 @@ import "package:flutter/services.dart";
 
 class NewIsolateInfo {
   String name;
-  String path;
   RootIsolateToken token;
-  NewIsolateInfo(this.name, this.path, this.token);
+  NewIsolateInfo(this.name, this.token);
 }
 
 Duration syncInterval = Duration(seconds: 7);
@@ -44,10 +43,11 @@ class IsolateHandler {
     return runZonedGuarded(() {
       Timer timer = Timer.periodic(syncInterval, callBack);
       if(fireNow){
+        print("$name firing");
         callBack(timer);
       }
       return timer;
-    }, (final e, final st) => print("Uncaught error in ${isolate.debugName} isolate, $e : $st"));
+    }, (final e, final st) => print("Uncaught error in ${isolate.debugName}, $e : $st"));
   }
 
   void busyBee(final Timer timer) async {
@@ -55,7 +55,7 @@ class IsolateHandler {
     Stopwatch timer = Stopwatch()..start();
     // loop for a bit
     while(timer.elapsed < Duration(seconds: 5)) {
-      var math = 8^7;
+      var math = 8^7; // makes your device a heater
       }
     timer.stop();
   }
