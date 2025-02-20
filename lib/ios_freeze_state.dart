@@ -1,11 +1,11 @@
 import 'dart:isolate';
 
+import 'package:bug/isolate_handler.dart';
 import 'package:equatable/equatable.dart';
 
 class IOSFreezeState extends Equatable {
-  final int counter;
-  final List<Isolate> isolateList;
-  const IOSFreezeState({this.counter = 0, this.isolateList = const []});
+  final List<IsolateHandler> isolateHandlers;
+  const IOSFreezeState({this.isolateHandlers = const []});
   @override
-  List<Object?> get props => [counter, isolateList];
+  List<Object?> get props => [isolateHandlers];
 }

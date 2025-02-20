@@ -3,7 +3,7 @@ import 'dart:isolate';
 import 'package:bug/ios_freeze_bloc.dart';
 import 'package:bug/ios_freeze_event.dart';
 import 'package:bug/ios_freeze_state.dart';
-import 'package:bug/isolate_task.dart';
+import 'package:bug/isolate_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,26 +61,22 @@ class IOSFreeze extends StatelessWidget {
                   WidgetsFlutterBinding.ensureInitialized();
                   String path = await rootBundle
                       .loadString("assets/bee_movie_script.txt");
+                  List<IsolateHandler> newIsolates = [];
                   for (int i in Iterable.generate(8))
                   {
                     NewIsolateInfo info = NewIsolateInfo(
-                      "isolate${state.counter}$i",
+                      "isolate${state.isolateHandlers.length + i}",
                       path,
                       ServicesBinding.rootIsolateToken!);
-                  print("Creating new isolate ${state.counter}$i");
+                       newIsolates.add(IsolateHandler(info));
                   
-                  Isolate newIsolate = await Isolate.spawn(initIsolate, info,
-                      debugName: "isolate${state.counter}$i");
+                  }
                   if (context.mounted) {
                     BlocProvider.of<IOSFreezeBloc>(context)
-                        .add(IOSFreezeEvent(isolate: newIsolate));
+                        .add(IOSFreezeEvent(isolates: newIsolates));
                   } else {
                     print(
-                        "Context not mounted while creating isolate ${state.counter + 1}");
-                  }
-
-                  print(
-                      "there are now ${state.isolateList.length + 1} isolates");
+                        "Context not mounted while creating isolates");
                   }
                   
                 },
@@ -89,13 +85,13 @@ class IOSFreeze extends StatelessWidget {
               ),
               Expanded(
                   child: ListView.builder(
-                itemCount: state.isolateList.length,
+                itemCount: state.isolateHandlers.length,
                 itemBuilder: (BuildContext context, int index) {
-                  Isolate isolate = state.isolateList[index];
+                  IsolateHandler handler = state.isolateHandlers[index];
                   print("building list item $index");
                   return ListTile(
                       title: Text(
-                          "${isolate.debugName} : ${isolate.pauseCapability != null} : ${isolate.terminateCapability != null}"));
+                          "${handler.name} "));
                 },
               )),
             ],

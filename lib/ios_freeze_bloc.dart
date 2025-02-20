@@ -2,6 +2,7 @@ import 'dart:isolate';
 
 import 'package:bug/ios_freeze_event.dart';
 import 'package:bug/ios_freeze_state.dart';
+import 'package:bug/isolate_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class IOSFreezeBloc extends Bloc<IOSFreezeEvent, IOSFreezeState> {
@@ -10,11 +11,11 @@ class IOSFreezeBloc extends Bloc<IOSFreezeEvent, IOSFreezeState> {
   }
   void _addIsolate(
       final IOSFreezeEvent event, final Emitter<IOSFreezeState> emit) {
-    List<Isolate> list = List.from(state.isolateList);
-    if (event.isolate != null) {
-      list.add(event.isolate!);
+    List<IsolateHandler> list = List.from(state.isolateHandlers);
+    if (event.isolates != null) {
+      list.addAll(event.isolates!);
     }
 
-    emit(IOSFreezeState(counter: state.counter + 1, isolateList: list));
+    emit(IOSFreezeState(isolateHandlers: list));
   }
 }
