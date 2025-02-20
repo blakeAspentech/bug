@@ -66,7 +66,7 @@ class Lag extends StatelessWidget {
                     NewIsolateInfo info = NewIsolateInfo(
                       "isolate${state.isolateHandlers.length + i}",
                       ServicesBinding.rootIsolateToken!);
-                      await Future.delayed(Duration(milliseconds: 10)); // offset the isolates
+                      //await Future.delayed(Duration(milliseconds: 10)); // offset the isolates
                       print("Isolate dispatch $i");
                        newIsolates.add(IsolateHandler(info));
                   
