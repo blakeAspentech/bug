@@ -24,25 +24,16 @@ Future<void> busyBee(final NewIsolateInfo info) async {
   String fullScript = info.path;
   print("[$name] File loaded");
 
-  // loop forever
-  while(true) {
+  while (true)
+  {
     Stopwatch timer = Stopwatch()..start();
-    var charRegex = RegExp(r"[^\w\s]");
-    var newlineRegex = RegExp(r"(\r\n|\r|\n)");
-    String cleanedScript = fullScript.replaceAll(newlineRegex, " ").replaceAll(charRegex, "");
-
-    List<String> splitScript = cleanedScript.toLowerCase().split(" ").where((final word) => word.isNotEmpty).toList();
-
-    splitScript.sort((final a, final b) => a.compareTo(b));
-
-    //File(sortedScriptLocation).writeAsStringSync(splitScript.join(" "), mode: FileMode.write);
-
-    Map<String, int> wordCount = {};
-    for (final word in splitScript) {
-      int i = wordCount[word] ?? 0;
-      wordCount[word] = i + 1;
+  // loop forever ish
+  while(timer.elapsed < Duration(seconds: 10)) {
+    var math = 8^7;
     }
+  print("ding ding ding $name");
 
-    timer.stop();
+  timer.stop();
+  var _ = await Future.delayed(Duration(seconds: 1));
   }
 }

@@ -61,13 +61,16 @@ class IOSFreeze extends StatelessWidget {
                   WidgetsFlutterBinding.ensureInitialized();
                   String path = await rootBundle
                       .loadString("assets/bee_movie_script.txt");
-                  NewIsolateInfo info = NewIsolateInfo(
-                      "isolate${state.counter}",
+                  for (int i in Iterable.generate(8))
+                  {
+                    NewIsolateInfo info = NewIsolateInfo(
+                      "isolate${state.counter}$i",
                       path,
                       ServicesBinding.rootIsolateToken!);
-                  print("Creating new isolate ${state.counter}");
+                  print("Creating new isolate ${state.counter}$i");
+                  
                   Isolate newIsolate = await Isolate.spawn(initIsolate, info,
-                      debugName: "isolate${state.counter}");
+                      debugName: "isolate${state.counter}$i");
                   if (context.mounted) {
                     BlocProvider.of<IOSFreezeBloc>(context)
                         .add(IOSFreezeEvent(isolate: newIsolate));
@@ -78,6 +81,8 @@ class IOSFreeze extends StatelessWidget {
 
                   print(
                       "there are now ${state.isolateList.length + 1} isolates");
+                  }
+                  
                 },
                 icon: const Icon(Icons.add),
                 label: const Text('Add Isolate'),
