@@ -12,7 +12,7 @@ class NewIsolateInfo {
 }
 
 Duration syncInterval = Duration(seconds: 5);
-Duration busyInterval = Duration(milliseconds: 4950);
+Duration busyInterval = Duration(milliseconds: 3950);
 
 class IsolateHandler {
 
@@ -31,7 +31,7 @@ class IsolateHandler {
   void initIsolate(final NewIsolateInfo info)
   {
     BackgroundIsolateBinaryMessenger.ensureInitialized(info.token);
-    _timer = makePeriodicTimer(syncInterval, busyBee, fireNow: true);
+    makePeriodicTimer(syncInterval, busyBee, fireNow: true);
   }
 
   void createIsolate(NewIsolateInfo info) async {
@@ -40,24 +40,25 @@ class IsolateHandler {
     
   }
 
-  Timer? makePeriodicTimer(final Duration duration, final Function(Timer) callBack, {final bool fireNow = false}){
-    return runZonedGuarded(() {
-      Timer timer = Timer.periodic(syncInterval, callBack);
-      if(fireNow){
-        print("$name firing");
-        callBack(timer);
-      }
-      return timer;
+  void makePeriodicTimer(final Duration duration, final Function callBack, {final bool fireNow = false}){
+    return runZonedGuarded(() async {
+        Timer(syncInterval, busyBee);
+      return;
     }, (final e, final st) => print("Uncaught error in ${isolate.debugName}, $e : $st"));
   }
 
-  void busyBee(final Timer timer) async {
+  void busyBee() async {
 
-    Stopwatch timer = Stopwatch()..start();
+    Stopwatch watch = Stopwatch()..start();
     // loop for a bit
-    while(timer.elapsed < busyInterval) {
+    while(watch.elapsed < busyInterval) {
       var math = 8^7; // makes your device a heater
       }
-    timer.stop();
+      
+    watch.stop();
+    
+    print("isolate $name run");
+    makePeriodicTimer(syncInterval, busyBee);
+    
   }
 }

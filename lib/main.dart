@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
 
 class Lag extends StatelessWidget {
 
-  final int isolatesPerClick = 8;
+  final int isolatesPerClick = 1;
   const Lag({super.key});
 
   @override
